@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3D Bin Packing Algorithm Challenge</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="container">
+        <h1>3D Bin Packing Algorithm Challenge</h1>
+        <p class="subtitle">
+          Optimize the placement of items into boxes while minimizing the number
+          of boxes used
+        </p>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container">
+      <!-- Input Section -->
+      <section class="input-section">
+        <div class="input-grid">
+          <!-- Items Input -->
+          <div class="card">
+            <div class="card__header">
+              <h3>Items to Pack</h3>
+              <button
+                type="button"
+                class="btn btn--sm btn--secondary"
+                id="addItemBtn"
+              >
+                Add Item
+              </button>
+            </div>
+            <div class="card__body">
+              <div id="itemsContainer">
+                <!-- Items will be added here dynamically -->
+              </div>
+              <template id="itemTemplate">
+                <div class="item-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Name</label>
+                      <input
+                        type="text"
+                        class="form-control item-name"
+                        placeholder="Item name"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Length</label>
+                      <input
+                        type="number"
+                        class="form-control item-length"
+                        placeholder="Length"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Breadth</label>
+                      <input
+                        type="number"
+                        class="form-control item-breadth"
+                        placeholder="Breadth"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Height</label>
+                      <input
+                        type="number"
+                        class="form-control item-height"
+                        placeholder="Height"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Weight</label>
+                      <input
+                        type="number"
+                        class="form-control item-weight"
+                        placeholder="Weight"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <button
+                        type="button"
+                        class="btn btn--sm btn--outline remove-item"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+
+          <!-- Boxes Input -->
+          <div class="card">
+            <div class="card__header">
+              <h3>Available Boxes</h3>
+              <button
+                type="button"
+                class="btn btn--sm btn--secondary"
+                id="addBoxBtn"
+              >
+                Add Box
+              </button>
+            </div>
+            <div class="card__body">
+              <div id="boxesContainer">
+                <!-- Boxes will be added here dynamically -->
+              </div>
+              <template id="boxTemplate">
+                <div class="box-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Name</label>
+                      <input
+                        type="text"
+                        class="form-control box-name"
+                        placeholder="Box name"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Length</label>
+                      <input
+                        type="number"
+                        class="form-control box-l"
+                        placeholder="Length"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Breadth</label>
+                      <input
+                        type="number"
+                        class="form-control box-b"
+                        placeholder="Breadth"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Height</label>
+                      <input
+                        type="number"
+                        class="form-control box-h"
+                        placeholder="Height"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Weight Capacity</label>
+                      <input
+                        type="number"
+                        class="form-control box-weight"
+                        placeholder="Max weight"
+                        min="0"
+                        step="0.1"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <button
+                        type="button"
+                        class="btn btn--sm btn--outline remove-box"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Data Button -->
+        <div class="sample-data-section">
+          <button type="button" class="btn btn--outline" id="loadSampleData">
+            Load Sample Data
+          </button>
+        </div>
+      </section>
+
+      <!-- Algorithm Control -->
+      <section class="algorithm-control">
+        <div class="card">
+          <div class="card__header">
+            <h3>Algorithm Settings</h3>
+          </div>
+          <div class="card__body">
+            <div class="control-row">
+              <div class="form-group">
+                <label class="form-label">Algorithm Type</label>
+                <select class="form-control" id="algorithmSelect">
+                  <option value="auto">Auto-select Best</option>
+                  <option value="ffd">First Fit Decreasing</option>
+                  <option value="bfd">Best Fit Decreasing</option>
+                </select>
+              </div>
+              <button
+                type="button"
+                class="btn btn--primary btn--lg"
+                id="packItemsBtn"
+              >
+                Pack Items
+              </button>
+            </div>
+            <div id="progressContainer" class="progress-container hidden">
+              <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+              <span class="progress-text" id="progressText">Processing...</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Display -->
+      <section class="results-section" id="resultsSection">
+        <!-- Results will be populated here -->
+      </section>
+
+      <!-- Algorithm Information -->
+      <section class="algorithm-info">
+        <div class="card">
+          <div class="card__header">
+            <h3>Algorithm Information</h3>
+          </div>
+          <div class="card__body">
+            <div class="info-grid">
+              <div class="info-section">
+                <h4>Features</h4>
+                <ul>
+                  <li>6-way rotation capability for optimal fitting</li>
+                  <li>Weight constraint validation</li>
+                  <li>Dual algorithm approach (FFD and BFD)</li>
+                  <li>Automatic optimization selection</li>
+                </ul>
+              </div>
+              <div class="info-section">
+                <h4>Rotation Types</h4>
+                <ul>
+                  <li><strong>Type 0:</strong> Original orientation</li>
+                  <li><strong>Type 1:</strong> 90° rotation around X-axis</li>
+                  <li><strong>Type 2:</strong> 90° rotation around Z-axis</li>
+                  <li><strong>Type 3:</strong> 90° rotation around Y-axis</li>
+                  <li><strong>Type 4:</strong> 180° rotation around Y-axis</li>
+                  <li><strong>Type 5:</strong> 270° rotation around Y-axis</li>
+                </ul>
+              </div>
+            </div>
+            <p class="algorithm-description">
+              This 3D bin packing algorithm optimizes the placement of items
+              into boxes while minimizing the number of boxes used. The
+              algorithm tries all possible rotations of items to find the best
+              fit and uses advanced heuristics to optimize packing efficiency.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
