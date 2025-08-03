@@ -1,3 +1,6 @@
+![Alt text describing 3D bin packing]( <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/8f7d06b9-66a5-42ce-8606-c1b675157898" />
+)
+
 # 3D Bin Packing Algorithm Implementation
 
 <!-- Complete JavaScript Solution
